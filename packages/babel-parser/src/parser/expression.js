@@ -169,6 +169,13 @@ export default class ExpressionParser extends LValParser {
       this.toReferencedList(node.expressions);
       return this.finishNode(node, "SequenceExpression");
     }
+    if (this.match(tt.colon)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.lower = expr;
+      this.eat(tt.colon);
+      node.upper = this.parseMaybeAssign(noIn, refExpressionErrors);
+      return this.finishNode(node, "SliceExpression");
+    }
     return expr;
   }
 
